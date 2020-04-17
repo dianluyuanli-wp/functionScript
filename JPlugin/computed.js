@@ -33,6 +33,31 @@ let allFunc = async function() {
     return '总阅读数:' + compute('views') + ' 总评论:' + compute('comments') +  ' 总点赞: ' + compute('likes')
 }
 
+const getApiPromise = function(url) {
+    return new Promise((resolve, reject) => {
+        try {
+            $.get(url, function(data) {
+                resolve(data);
+            })
+        } catch(e) {
+            reject(e)
+        }
+    })
+}
+
+const countThroughApi = async function() {
+    //  https://www.jianshu.com/u/ddd82379f406?order_by=shared_at&page=2
+    const exec = /[0-9a-z]{12}$/
+    const userId = window.location.href.match(exec)[0];
+    if (!userId) {
+        return 'notFind';
+    }
+    let page = 1
+    const getUrl = `https://www.jianshu.com/u/${userId}?order_by=shared_at&page=${page}`
+    let res = await getApiPromise(getUrl)
+    console.log(res);
+}
+
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse)
 {
     sendResponse('我收到了你的消息！');
