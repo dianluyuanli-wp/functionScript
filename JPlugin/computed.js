@@ -45,6 +45,8 @@ const getApiPromise = function(url) {
     })
 }
 
+const getUrl = (id, page) => `https://www.jianshu.com/u/${id}?order_by=shared_at&page=${page}`
+
 const countThroughApi = async function() {
     //  https://www.jianshu.com/u/ddd82379f406?order_by=shared_at&page=2
     const exec = /[0-9a-z]{12}$/
@@ -52,15 +54,36 @@ const countThroughApi = async function() {
     if (!userId) {
         return 'notFind';
     }
-    let page = 1
-    const getUrl = `https://www.jianshu.com/u/${userId}?order_by=shared_at&page=${page}`
-    let res = await getApiPromise(getUrl)
-    console.log(res);
+    let page = 1;
+    let loopFlag = true;
+    let res = await getApiPromise(getUrl(userId, page));
+    let viewReg = /(?<=<i class="iconfont ic-list-read"><\/i>).*(?=<\/a>)/g
+    // while (loopFlag) {
+    //     if (res.includes('<!-- 发表了文章 -->') || res.includes('<!-- 发表了评论 -->')) {
+    //         loopFlag = false;
+    //         return;
+    //     }
+    //     page += 1;
+    //     res = await getApiPromise(getUrl(userId, page));
+    //     const resArray = res.match(viewReg);
+    //     console.log(resArray);
+    // }
+    if (res.includes('<!-- 发表了文章 -->') || res.includes('<!-- 发表了评论 -->')) {
+        loopFlag = false;
+        //return;
+    }
+    page += 1;
+    res = await getApiPromise(getUrl(userId, page));
+    const resArray = res.match(viewReg);
+    console.log(resArray);
+
+    //console.log(res);
 }
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse)
 {
     sendResponse('我收到了你的消息！');
-    const ans = await allFunc();
-    alert(ans);
+    countThroughApi();
+    // const ans = await allFunc();
+    // alert(ans);
 });
