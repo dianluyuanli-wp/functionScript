@@ -45,10 +45,11 @@ const getApiPromise = function(url) {
     })
 }
 
-const getUrl = (id, page) => `https://www.jianshu.com/u/${id}?order_by=shared_at&page=${page}`
+const getUrl = (id, page) => `https://www.jianshu.com/u/${id}?order_by=shared_at&page=${page}`;
+const getCount = (originContent, reg) => originContent.toString().match(reg).reduce((oldValue, newVaule) => {
+    return oldValue + parseInt(newVaule)}, 0)
 
 const countThroughApi = async function() {
-    //  https://www.jianshu.com/u/ddd82379f406?order_by=shared_at&page=2
     const exec = /[0-9a-z]{12}$/
     const userId = window.location.href.match(exec)[0];
     if (!userId) {
@@ -56,34 +57,27 @@ const countThroughApi = async function() {
     }
     let page = 1;
     let loopFlag = true;
-    let res = await getApiPromise(getUrl(userId, page));
-    let viewReg = /(?<=<i class="iconfont ic-list-read"><\/i>).*(?=<\/a>)/g
-    // while (loopFlag) {
-    //     if (res.includes('<!-- 发表了文章 -->') || res.includes('<!-- 发表了评论 -->')) {
-    //         loopFlag = false;
-    //         return;
-    //     }
-    //     page += 1;
-    //     res = await getApiPromise(getUrl(userId, page));
-    //     const resArray = res.match(viewReg);
-    //     console.log(resArray);
-    // }
-    if (res.includes('<!-- 发表了文章 -->') || res.includes('<!-- 发表了评论 -->')) {
-        loopFlag = false;
-        //return;
+    let views = 0, comments = 0, likes = 0;
+    let res;
+    const viewReg = /(?<=<i class="iconfont ic-list-read"><\/i>\s).*(?=(\s)*<\/a>)/g;
+    const commentReg = /(?<=<i class="iconfont ic-list-comments"><\/i>\s).*(?=(\s)*<\/a>)/g;
+    const likesReg = /(?<=<i class="iconfont ic-list-like"><\/i>\s).*(?=(\s)*<\/span>)/g;
+    while (loopFlag) {
+        res = await getApiPromise(getUrl(userId, page));
+        if (res.includes('<!-- 发表了文章 -->') || res.includes('<!-- 发表了评论 -->')) {
+            loopFlag = false;
+            break;
+        }
+        views += getCount(res, viewReg);
+        comments += getCount(res, commentReg);
+        likes += getCount(res, likesReg);
+        page += 1;
     }
-    page += 1;
-    res = await getApiPromise(getUrl(userId, page));
-    const resArray = res.match(viewReg);
-    console.log(resArray);
-
-    //console.log(res);
+    alert('浏览数:' + views + ' 评论数：' + comments + ' 点赞数: ' + likes);
 }
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse)
 {
     sendResponse('我收到了你的消息！');
     countThroughApi();
-    // const ans = await allFunc();
-    // alert(ans);
 });
