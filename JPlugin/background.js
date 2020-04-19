@@ -36,7 +36,7 @@ chrome.runtime.onInstalled.addListener(function(){
 		chrome.declarativeContent.onPageChanged.addRules([
 			{
 				conditions: [
-					// 只有打开简书才显示pageAction
+					// 只有打开简书的用户页才显示pageAction
 					new chrome.declarativeContent.PageStateMatcher({pageUrl: {urlContains: 'www.jianshu.com/u'}})
 				],
 				actions: [new chrome.declarativeContent.ShowPageAction()]

@@ -29,8 +29,9 @@ let allFunc = async function() {
         });
         return count;
     }
-    console.log('总阅读数:' , compute('views'), '总评论', compute('comments'), '总点赞', compute('likes'));
-    return '总阅读数:' + compute('views') + ' 总评论:' + compute('comments') +  ' 总点赞: ' + compute('likes')
+    const ansString = '总阅读数:' + compute('views') + '总评论' + compute('comments') + '总点赞' + compute('likes');
+    console.log(ansString);
+    return ansString;
 }
 
 const getApiPromise = function(url) {
@@ -56,16 +57,14 @@ const countThroughApi = async function() {
         return 'notFind';
     }
     let page = 1;
-    let loopFlag = true;
     let views = 0, comments = 0, likes = 0;
     let res;
     const viewReg = /(?<=<i class="iconfont ic-list-read"><\/i>\s).*(?=(\s)*<\/a>)/g;
     const commentReg = /(?<=<i class="iconfont ic-list-comments"><\/i>\s).*(?=(\s)*<\/a>)/g;
     const likesReg = /(?<=<i class="iconfont ic-list-like"><\/i>\s).*(?=(\s)*<\/span>)/g;
-    while (loopFlag) {
+    while (true) {
         res = await getApiPromise(getUrl(userId, page));
         if (res.includes('<!-- 发表了文章 -->') || res.includes('<!-- 发表了评论 -->')) {
-            loopFlag = false;
             break;
         }
         views += getCount(res, viewReg);
@@ -73,7 +72,9 @@ const countThroughApi = async function() {
         likes += getCount(res, likesReg);
         page += 1;
     }
-    return '总阅读数:' + views + ' 总评论：' + comments + ' 总点赞: ' + likes;
+    const ansString = '总阅读数:' + views + ' 总评论：' + comments + ' 总点赞: ' + likes;
+    console.log(ansString);
+    return ansString;
 }
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse)
