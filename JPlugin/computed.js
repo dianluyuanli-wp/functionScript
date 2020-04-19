@@ -73,11 +73,15 @@ const countThroughApi = async function() {
         likes += getCount(res, likesReg);
         page += 1;
     }
-    alert('浏览数:' + views + ' 评论数：' + comments + ' 点赞数: ' + likes);
+    return '总阅读数:' + views + ' 总评论：' + comments + ' 总点赞: ' + likes;
 }
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse)
 {
-    sendResponse('我收到了你的消息！');
-    countThroughApi();
+    sendResponse('');
+    if (request.cmd === 'dom') {
+        alert(await allFunc());
+    } else {
+        alert(await countThroughApi())
+    }
 });

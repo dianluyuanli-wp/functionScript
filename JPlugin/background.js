@@ -10,10 +10,21 @@ function sendMessageToContentScript(message, callback)
 }
 
 chrome.contextMenus.create({
-    title: "计算浏览数",
+    title: "计算浏览数-by页面滚动统计Dom",
     documentUrlPatterns: ['https://www.jianshu.com/u/*'],
 	onclick: function(){
-        sendMessageToContentScript({cmd:'test', value:'你好，我是popup！'}, function(response)
+        sendMessageToContentScript({cmd:'dom'}, function(response)
+        {
+            //  console.log('来自content的回复：'+response);
+        });
+    }
+});
+
+chrome.contextMenus.create({
+    title: "计算浏览数-by请求api",
+    documentUrlPatterns: ['https://www.jianshu.com/u/*'],
+	onclick: function(){
+        sendMessageToContentScript({cmd:'api'}, function(response)
         {
             //  console.log('来自content的回复：'+response);
         });
