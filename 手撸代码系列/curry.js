@@ -1,6 +1,7 @@
 function curry(fn) {
     this.allArgs = [];
     let a = function() {
+      // 这里是个类数组对象，本身并不是数组，需要用slice数组化
       const curArg = [].slice.call(arguments);
       if (curArg.length) {
         this.allArgs = allArgs.concat(curArg.slice(0, curArg.length));
@@ -19,10 +20,12 @@ function curry(fn) {
   }
   
   let add = curry(function() {
-    return this.allArgs.reduce((all, cur) => {
-      return all + cur;
-    }, 0);
-  })
+    console.log(arguments, '123');
+    const x = [].slice.call(arguments);
+    return x.reduce((old, item) => {
+      return old + item;
+    }, 0)
+  });
   let a = add(2)(3,4)(2);
   console.log(a);
 
