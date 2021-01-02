@@ -109,3 +109,23 @@ function myP(executor) {
     return a;
   });
   console.log(xx);
+
+  async function b() {
+    const a = await new myPromise(res => {
+      setTimeout(() => {
+        console.log('1 sec')
+        res(1)
+      }, 1000)
+    }).then((val) => {
+        return new myPromise(res1 => {
+          setTimeout(() => {
+            res1(2)
+          }, 1000)    
+        })
+      }).then(val => {
+        console.log(val, 'sus')
+        return val;
+      });
+    console.log(a, '222');
+  } 
+  b();
