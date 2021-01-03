@@ -21,7 +21,7 @@ Function.prototype.myCall = function(incontext) {
     const args = [...arguments].slice(1);
     let res;
     if (arguments[1]) {
-      res = context.fn(arguments[1]);
+      res = context.fn(args);
     } else {
       res = context.fn()
     }
