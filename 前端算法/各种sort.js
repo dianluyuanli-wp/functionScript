@@ -141,7 +141,7 @@ function insert(arr) {
     return newArr;
 }
 
-//  技术排序
+//  计数排序
 function buekt(arr) {
     let max = -Infinity, min = Infinity;
     for(let i = 0; i < arr.length; i++) {

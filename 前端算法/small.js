@@ -84,6 +84,21 @@ function feibo(tn) {
     return res;
 }
 
+//  循环版本实现
+function fb2(n) {
+    let arr = [];
+    let i = 0;
+    while(i < n) {
+      if ([0, 1].includes(i)) {
+        arr[i] = 1;
+      } else {
+        arr[i] = arr[i-1] + arr[i-2]
+      }
+      i++;
+    }
+    return arr;
+}
+
 // 找到数组中的最大最小之差
 function findMinus(arr) {
     let max = arr[0], min = arr[0];
