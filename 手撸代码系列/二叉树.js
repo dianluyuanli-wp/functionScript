@@ -43,8 +43,35 @@ class BinaryTree {
     showTree() {
       return this.root;
     }
-    goLeft() {
-  
+    // 递归中序
+    inOrder(node, cb) {
+        if (node.left) {
+        this.inOrder(node.left, cb)
+        }
+        cb(node);
+        if (node.right) {
+        this.inOrder(node.right, cb)
+        }
+    }
+    // 递归前序
+    preOrder(node,cb) {
+        cb(node);
+        if (node.left) {
+        this.preOrder(node.left, cb)
+        }
+        if (node.right) {
+        this.preOrder(node.right, cb)
+        }
+    }
+    // 递归后续
+    postOrder(node,cb) {
+        if (node.left) {
+        this.postOrder(node.left, cb)
+        }
+        if (node.right) {
+        this.postOrder(node.right, cb)
+        }
+        cb(node);
     }
     inOrder(node, cb) {
       if (node.left) {
@@ -159,3 +186,6 @@ class BinaryTree {
   let tree = binaryTree.showTree();
   binaryTree.remove(binaryTree.root, 6);
   console.log(binaryTree.showTree(), '111')
+
+  // https://juejin.cn/post/6844903507988840456#heading-3
+  // https://juejin.cn/post/6844904082038063118#heading-9
