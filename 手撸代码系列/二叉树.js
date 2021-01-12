@@ -187,5 +187,40 @@ class BinaryTree {
   binaryTree.remove(binaryTree.root, 6);
   console.log(binaryTree.showTree(), '111')
 
+//  递归计算最大深度
+function getDeep(node) {
+    if (!node) {
+        return 0;
+    }
+    return Math.max(getDeep(node.left), getDeep(node.right)) + 1;
+}
+
+// 找到所有路径和为某个值的路径
+function fr(node, target) {
+    let res = [];
+    function findr(node, path) {
+      if (!node) {
+        return;
+      }
+      if (!node.left && !node.right) {
+        sum = path.reduce((old, item) => {
+          return old + item.value
+        }, 0) + node.value;
+        if (sum === target) {
+          path.push(node);
+          res.push(path.slice());
+        }
+      } else {
+        // let left1 = path.slice();
+        // left1.push(node);
+        path.push(node);
+        findr(node.left, path.slice());
+        findr(node.right, path.slice());
+      }
+    }
+    findr(node, []);
+    return res.map((item) => item.map(item => item.value));
+}
+
   // https://juejin.cn/post/6844903507988840456#heading-3
   // https://juejin.cn/post/6844904082038063118#heading-9
