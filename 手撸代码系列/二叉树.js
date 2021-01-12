@@ -1,0 +1,161 @@
+class BinaryTree {
+    constructor(list = []) {
+      this.root = null;
+      if (typeof list === 'number') {
+        this.insertNode(this.root, this.createNode(list))
+      } else if (list instanceof Array) {
+        this.insertArray(list);
+      } else {
+        alert('请输入数字或数组')
+      }
+    }
+    createNode(value) {
+      let a = Object.create(null, {});
+      a.left = null;
+      a.right = null;
+      a.value = value;
+      return a;
+    }
+    insertNode(node, insertN) {
+      if (!this.root) {
+        this.root = insertN;
+        return;
+      }
+      if (node.value > insertN.value) {
+        if (!node.left) {
+          node.left = insertN
+        } else {
+          this.insertNode(node.left, insertN)
+        }
+      } else {
+        if (!node.right) {
+          node.right = insertN
+        } else {
+          this.insertNode(node.right, insertN)
+        }
+      }
+    }
+    insertArray(arr) {
+      arr.forEach(item => {
+        this.insertNode(this.root, this.createNode(item))
+      })
+    }
+    showTree() {
+      return this.root;
+    }
+    goLeft() {
+  
+    }
+    inOrder(node, cb) {
+      if (node.left) {
+        this.inOrder(node.left, cb)
+      }
+      cb(node);
+      if (node.right) {
+        this.inOrder(node.right, cb)
+      }
+    }
+    preOrder(node,cb) {
+      cb(node);
+      if (node.left) {
+        this.preOrder(node.left, cb)
+      }
+      if (node.right) {
+        this.preOrder(node.right, cb)
+      }
+    }
+    postOrder(node,cb) {
+      if (node.left) {
+        this.postOrder(node.left, cb)
+      }
+      if (node.right) {
+        this.postOrder(node.right, cb)
+      }
+      cb(node);
+    }
+    findNode(node, target) {
+      if (!node) {
+        return null
+      }
+      if (node.value < target) {
+        return this.findNode(node.right, target)
+      } else if (node.value > target) {
+        return this.findNode(node.left, target)
+      } else {
+        return node;
+      }
+    }
+    max() {
+      let node = this.root;
+      while(node.right) {
+        node = node.right;
+      }
+      return node.value;
+    }
+    min() {
+      let node = this.root;
+      while(node.left) {
+        node = node.left;
+      }
+      return node.value;
+    }
+    remove(rootN, target) {
+      // 这样有问题，应为targetN赋值的时候，只是内存指向了null(targetN是一个新的副本，只是指向原来的节点，)
+      //  修改指向的话，原来的指向并不会改变
+      // let targetN = this.findNode(rootN, target);
+      // if (!targetN) {
+      //   return null;
+      // }
+      // if (targetN.left === null && targetN.right === null) {
+      //   targetN = null;
+      // } else if(targetN.left === null && targetN.right) {
+      //   targetN = targetN.right;
+      // } else if (targetN.right === null && targetN.left) {
+      //   targetN = targetN.left
+      // } else {
+      //   let tn = targetN.right;
+      //   while(tn.left) {
+      //     tn = tn.left;
+      //   }
+      //   targetN.value = tn.value;
+      //   this.remove(targetN.right, tn.value);
+      // }
+      const removeNode = (node, value) => {
+        if (!node) {
+          return node;
+        }
+        if (node.value < value) {
+          node.right = removeNode(node.right, value);
+          return node;
+        } else if(node.value > value) {
+          node.left = removeNode(node.left, value);
+          return node;
+        } else {
+          if (!node.left && !node.right) {
+            node = null;
+            return node;
+          } else if (node.left && !node.right) {
+            node = node.left;
+            return node;
+          } else if (node.right && !node.left) {
+            node = node.right;
+            return node;
+          } else {
+            let tn = node.right;
+            while(tn.left) {
+              tn = tn.left;
+            }
+            node.value = tn.value;
+            node.right = removeNode(node.right, tn.value);
+            return node;
+          }
+        }
+      }
+      this.root = removeNode(rootN, target);
+    }
+  }
+  let nodes = [8,3,6,4,9,11,2,5,7];
+  let binaryTree = new BinaryTree(nodes);
+  let tree = binaryTree.showTree();
+  binaryTree.remove(binaryTree.root, 6);
+  console.log(binaryTree.showTree(), '111')
