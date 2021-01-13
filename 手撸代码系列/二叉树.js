@@ -73,32 +73,57 @@ class BinaryTree {
         }
         cb(node);
     }
-    inOrder(node, cb) {
-      if (node.left) {
-        this.inOrder(node.left, cb)
-      }
-      cb(node);
-      if (node.right) {
-        this.inOrder(node.right, cb)
-      }
+    // 中序非递归
+    iOFor(node, cb) {
+        let res = [];
+        let originNode = node;
+        while(true) {
+        while(originNode) {
+            res.push(originNode);
+            originNode = originNode.left;
+        }
+        if (res.length === 0) {
+            break;
+        }
+        originNode && cb(originNode);
+        let temp = res.pop();
+        cb(temp);
+        originNode = temp.right;
+        }
     }
-    preOrder(node,cb) {
-      cb(node);
-      if (node.left) {
-        this.preOrder(node.left, cb)
-      }
-      if (node.right) {
-        this.preOrder(node.right, cb)
-      }
+    // 先序非递归
+    pOFor(node, cb) {
+        let res = [];
+        while(true) {
+        //node && cb(node);
+        while(node) {
+            cb(node);
+            res.push(node.right);
+            node = node.left;
+        }
+        if (!res.length) {
+            break;
+        }
+        let temp = res.pop();
+        node = temp;
+        }
     }
-    postOrder(node,cb) {
-      if (node.left) {
-        this.postOrder(node.left, cb)
-      }
-      if (node.right) {
-        this.postOrder(node.right, cb)
-      }
-      cb(node);
+    // 后续非递归
+    postOFor(node, cb) {
+        let res = [], nodeList = [];
+        while(true) {
+        while(node) {
+            nodeList.push(node);
+            res.push(node.left);
+            node = node.right;
+        }
+        if (!res.length) {
+            break;
+        }
+        let temp = res.pop();
+        node = temp;
+        }
+        nodeList.reverse().forEach(cb);
     }
     findNode(node, target) {
       if (!node) {
