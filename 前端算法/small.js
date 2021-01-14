@@ -114,3 +114,63 @@ function findMinus(arr) {
     }
     return max - min;
 }
+
+// 罗马数字映射
+let map = {
+    I: 1, V: 5, X: 10, L:50,C:100,D:500,M:1000
+  }
+  let s = 'MCMXCIV';
+  let sum = 0;
+  for(let i = 0; i<s.length; i++){
+    let num = map[s[i]];
+    if(i<s.length - 1 && num<map[s[i+1]]) {
+      sum -= num;
+    } else {
+      sum += num;
+    }
+  }
+console.log(sum);
+
+// 手写observe
+let obj = {
+    a: 1,
+    b: {
+      a: 2
+    },
+    c: [1,2,3]
+  };
+  function observe(obj) {
+    for(let key in obj) {
+      // 必须提前处理，否则会递归报错
+      let trValue = obj[key];
+      if (obj.hasOwnProperty(key)) {
+        // Object.defineProperty(obj, key, {
+        //     get() {
+        //       return trValue;
+        //     },
+        //     set(value) {
+        //       console.log('1', value);
+        //       return value;
+        //     }
+        // })
+        if (typeof obj[key] !== 'object') {
+          Object.defineProperty(obj, key, {
+            get() {
+              return trValue;
+            },
+            set(value) {
+              console.log('1', value);
+              return value;
+            }
+          })
+        } else {
+          observe(obj[key])
+        }
+      }
+    }
+  }
+  observe(obj);
+  obj.a = 10;
+  console.log(obj.c[2], '11');
+  obj.c[0] = 2;
+  console.log(obj);

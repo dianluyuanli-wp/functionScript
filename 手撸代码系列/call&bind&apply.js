@@ -21,7 +21,7 @@ Function.prototype.myApply = function(ctx) {
   let arg = [...arguments].slice(1);
   let res;
   if (arg.length) {
-    res = context.fn(...arg);
+    res = context.fn(...arg[0]);
   } else {
     res = context.fn();
   }
