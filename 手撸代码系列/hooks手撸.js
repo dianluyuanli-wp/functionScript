@@ -25,10 +25,11 @@ function useEffect(fn, dep) {
 let memorizedArry = [];
 let cursor = 0;
 function useState(init) {
+  let current = cursor;
   memorizedArry[cursor] = memorizedArry[cursor] || init;
   function set(value) {
     //stats = value;
-    memorizedArry[cursor] = value;
+    memorizedArry[current] = value;
     render();
     cursor = 0;
   }
