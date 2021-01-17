@@ -11,10 +11,10 @@ function curry(fn) {
       }
     }
     a.toString = function() {
-      return fn.call(null, this.allArgs)
+      return fn.apply(null, this.allArgs)
     }
     a.valueOf = function() {
-      return fn.call(null, this.allArgs)
+      return fn.apply(null, this.allArgs)
     }
     return a;
   }
