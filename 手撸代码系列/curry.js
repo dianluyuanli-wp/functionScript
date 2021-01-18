@@ -54,3 +54,24 @@ function curry(fn) {
   
   let x = unCurry(Toast.prototype.show);
   x(obj);
+
+  //  正宗curry
+  function curry(fn) {
+    let args = [...arguments].slice(1)
+    return function F() {
+      let newArg = [...arguments];
+      if(args.concat(newArg).length < fn.length) {
+        args = args.concat(newArg)
+        return F;
+      } else {
+        return fn.call(this, ...args.concat(newArg))
+      }
+    }
+  }
+  function add(m, n, p) {
+    console.log(1111, [...arguments], m, n);
+    return m + n + p;
+  }
+  const add5 = curry(add, 5);
+  let add4 = add5(1);
+  console.log(add4(1));
