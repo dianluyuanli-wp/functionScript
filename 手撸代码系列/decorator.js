@@ -25,3 +25,22 @@ function bbb(value) {
     }
 }
 
+let shan = {
+    age: 18
+};
+let value = shan.age;
+let descriptor = {
+    get() {
+        console.log("获取值", value);
+        return value;
+    },
+    set(val) {
+        console.log("修改值", val);
+        value = val;
+    }
+};
+Object.defineProperty(shan, "age", descriptor);
+ 
+shan.age;//触发get方法
+ 
+shan.age = 15;//触发set方法
