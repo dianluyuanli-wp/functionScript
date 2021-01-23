@@ -247,5 +247,20 @@ function fr(node, target) {
     return res.map((item) => item.map(item => item.value));
 }
 
+//  按层遍历
+function xxx(node) {
+  let res = [], stack = [node];
+  while(stack.length) {
+    res = res.concat(stack.slice());
+    let newStack = []
+    stack.forEach(item => {
+      item.left && newStack.push(item.left);
+      item.right && newStack.push(item.right);
+    })
+    stack = newStack;
+  }
+  console.log(res);
+}
+
   // https://juejin.cn/post/6844903507988840456#heading-3
   // https://juejin.cn/post/6844904082038063118#heading-9
