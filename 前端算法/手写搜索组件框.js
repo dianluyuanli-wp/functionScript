@@ -4,38 +4,32 @@
 <div id="box"></div> */}
 
 //  https://juejin.cn/post/6904151596960071687
-async function getInfo(value) {
-    return ['xx', 'xds'];
-  }
-  let input = document.getElementById('txt');
-  input.addEventListener('keyup', async function() {
-    let pop = document.getElementById('pop');
-    if (pop) {
-      document.removeChild(pop);
-    }
-    let boxDiv = document.getElementById('box');
-    let inputCon = document.getElementById('txt').value;
-    if (inputCon) {
-      return;
-    }
-    let tempArr = await getInfo(inputCon);
-    let ulObj = document.createElement('ul');
-    ulObj.id = 'pop';
-    boxDiv.appendChild(ulObj);
-    for(let i = 0; i<tempArr.length; i++) {
-      let liObj = document.createElement('li');
-      liObj.id = i;
-      liObj.innerHTML = tempArr[i];
-      ulObj.appendChild(liObj);
-      liObj.addEventListener('click', function() {
-        input.value = tempArr[i];
-        document.removeChild(ulObj);
-      })
-      liObj.addEventListener('mouseenter', function() {
-        liObj.setAttribute('style', 'color: red');
-      })
-      liObj.addEventListener('mouseout', function() {
-        liObj.setAttribute('style', 'color: blue')
-      })
-    }
+let contentArr = ['我来啦', '什么鬼', '哈哈哈'];
+let input = document.getElementById('txt');
+input.addEventListener('keyup', function() {
+  let pop = document.getElementById('pop');
+  let box = document.getElementById('box');
+  console.log(pop);
+  pop && box.removeChild(pop);
+  let value = input.value;
+  pop = document.createElement('ul');
+  pop.id = 'pop';
+  contentArr.forEach(item => {
+    let li = document.createElement('li');
+    li.innerHTML = item;
+    pop.appendChild(li);
+    li.setAttribute('style', 'color: red')
+    li.addEventListener('click', function() {
+      input.value = item;
+      box.removeChild(pop)
+    })
+    li.addEventListener('mouseenter', function() {
+      li.setAttribute('style', 'color: blue')
+    })
+    li.addEventListener('mouseout', function() {
+      li.setAttribute('style', 'color: red')
+    })
   })
+
+  box.appendChild(pop);
+})
